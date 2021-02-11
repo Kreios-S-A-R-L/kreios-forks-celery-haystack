@@ -2,12 +2,10 @@
 celery-haystack
 ===============
 
-.. image:: https://secure.travis-ci.org/django-haystack/celery-haystack.png?branch=develop
-    :alt: Build Status
-    :target: http://travis-ci.org/django-haystack/celery-haystack
-
 This Django app allows you to utilize Celery for automatically updating and
 deleting objects in a Haystack_ search index.
+
+Forked from the original celery-ng_.
 
 Requirements
 ------------
@@ -22,6 +20,7 @@ for Haystack and one of the supported backends for Celery.
 
 .. _Haystack: http://haystacksearch.org
 .. _Celery: http://www.celeryproject.org
+.. _celery-ng: https://github.com/django-haystack/celery-haystack
 
 
 Installation
@@ -29,7 +28,7 @@ Installation
 
 Use your favorite Python package manager to install the app from PyPI, e.g.::
 
-    pip install celery-haystack
+    pip install celery-haystack-ng
 
 
 For Django < 1.9 you need to install and configure `django-transaction-hooks`_ -- an app that
@@ -88,7 +87,7 @@ queues_ library by Matt Croyden.
 Issues
 ------
 
-Please use the `Github issue tracker`_ for any bug reports or feature
+Please use the `EduGit issue tracker`_ for any bug reports or feature
 requests.
 
-.. _`Github issue tracker`: https://github.com/django-haystack/celery-haystack/issues
+.. _`EduGit issue tracker`: https://edugit.org/AlekSIS/libs/celery-haystack-ng/-/issues
