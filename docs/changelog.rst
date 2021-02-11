@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v0.20 (2021-02-11)
+------------------
+
+* Forked as celery-haystack-ng: https://edugit.org/AlekSIS/libs/celery-haystack-ng
+
+* Added support for Celery 4.x and 5.x
+
+
 v0.9 (2015-06-13)
 -----------------
 
