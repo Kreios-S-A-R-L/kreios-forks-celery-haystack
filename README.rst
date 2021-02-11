@@ -1,11 +1,11 @@
-===============
-celery-haystack
-===============
+==================
+celery-haystack-ng
+==================
 
 This Django app allows you to utilize Celery for automatically updating and
 deleting objects in a Haystack_ search index.
 
-Forked from the original celery-ng_.
+Forked from the original celery-haystack_.
 
 Requirements
 ------------
@@ -20,7 +20,7 @@ for Haystack and one of the supported backends for Celery.
 
 .. _Haystack: http://haystacksearch.org
 .. _Celery: http://www.celeryproject.org
-.. _celery-ng: https://github.com/django-haystack/celery-haystack
+.. _celery-haystack: https://github.com/django-haystack/celery-haystack
 
 
 Installation
