@@ -7,13 +7,14 @@ from .conf import settings
 from haystack import connections, connection_router
 from haystack.exceptions import NotHandled as IndexNotFoundException
 
-from celery import Task  # noqa
+from celery import current_app  # noqa
 from celery.utils.log import get_task_logger
 
 logger = get_task_logger(__name__)
 
 
-class CeleryHaystackSignalHandler(Task):
+class CeleryHaystackSignalHandler(current_app.Task):
+    name = "haystack_signal_handler"
     using = settings.CELERY_HAYSTACK_DEFAULT_ALIAS
     max_retries = settings.CELERY_HAYSTACK_MAX_RETRIES
     default_retry_delay = settings.CELERY_HAYSTACK_RETRY_DELAY
@@ -134,11 +135,13 @@ class CeleryHaystackSignalHandler(Task):
                 raise ValueError("Unrecognized action %s" % action)
 
 
-class CeleryHaystackUpdateIndex(Task):
+class CeleryHaystackUpdateIndex(current_app.Task):
     """
     A celery task class to be used to call the update_index management
     command from Celery.
     """
+    name = "haystack_update_index"
+
     def run(self, apps=None, **kwargs):
         defaults = {
             'batchsize': settings.CELERY_HAYSTACK_COMMAND_BATCH_SIZE,
@@ -155,3 +158,7 @@ class CeleryHaystackUpdateIndex(Task):
         logger.info("Starting update index")
         call_command('update_index', *apps, **defaults)
         logger.info("Finishing update index")
+
+
+current_app.tasks.register(CeleryHaystackSignalHandler)
+current_app.tasks.register(CeleryHaystackUpdateIndex)
