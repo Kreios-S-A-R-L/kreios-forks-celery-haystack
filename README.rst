@@ -19,7 +19,6 @@ for Haystack and one of the supported backends for Celery.
 
 
 .. _Haystack: http://haystacksearch.org
-.. _Celery: http://www.celeryproject.org
 .. _celery-haystack: https://github.com/django-haystack/celery-haystack
 
 
