@@ -8,6 +8,7 @@ v0.20 (2021-02-11)
 
 * Added support for Celery 4.x and 5.x
 
+* Added ``CELERY_HAYSTACK_IGNORE_RESULT`` setting to not store results in result backend
 
 v0.9 (2015-06-13)
 -----------------
