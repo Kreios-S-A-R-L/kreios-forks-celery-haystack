@@ -10,9 +10,9 @@ Forked from the original celery-haystack_.
 Requirements
 ------------
 
-* Django 1.8+
-* Haystack_ `2.X`_
-* Celery_ 5.X
+* Django 2.1+
+* Haystack_ 2.X+
+* Celery_ 4.X+
 
 You also need to install your choice of one of the supported search engines
 for Haystack and one of the supported backends for Celery.
