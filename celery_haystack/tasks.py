@@ -160,5 +160,5 @@ class CeleryHaystackUpdateIndex(current_app.Task):
         logger.info("Finishing update index")
 
 
-current_app.tasks.register(CeleryHaystackSignalHandler)
-current_app.tasks.register(CeleryHaystackUpdateIndex)
+CeleryHaystackSignalHandler = current_app.register_task(CeleryHaystackSignalHandler())
+CeleryHaystackUpdateIndex = current_app.register_task(CeleryHaystackUpdateIndex())
