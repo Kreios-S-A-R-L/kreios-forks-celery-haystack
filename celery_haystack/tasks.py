@@ -13,6 +13,7 @@ from celery.utils.log import get_task_logger
 logger = get_task_logger(__name__)
 
 
+@current_app.register_task
 class CeleryHaystackSignalHandler(current_app.Task):
     name = "haystack_signal_handler"
     using = settings.CELERY_HAYSTACK_DEFAULT_ALIAS
@@ -135,6 +136,7 @@ class CeleryHaystackSignalHandler(current_app.Task):
                 raise ValueError("Unrecognized action %s" % action)
 
 
+@current_app.register_task
 class CeleryHaystackUpdateIndex(current_app.Task):
     """
     A celery task class to be used to call the update_index management
@@ -158,7 +160,3 @@ class CeleryHaystackUpdateIndex(current_app.Task):
         logger.info("Starting update index")
         call_command('update_index', *apps, **defaults)
         logger.info("Finishing update index")
-
-
-CeleryHaystackSignalHandler = current_app.register_task(CeleryHaystackSignalHandler())
-CeleryHaystackUpdateIndex = current_app.register_task(CeleryHaystackUpdateIndex())
