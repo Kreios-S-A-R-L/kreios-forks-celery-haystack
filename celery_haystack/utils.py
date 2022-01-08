@@ -24,7 +24,7 @@ def get_update_task(task_path=None):
     return task
 
 
-def enqueue_tasks(queue, **kwargs):
+def enqueue_task(queue, **kwargs):
     """
     Common utility for enqueing a task for the given action and
     model instance.
