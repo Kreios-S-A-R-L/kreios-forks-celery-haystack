@@ -5,8 +5,6 @@ except ImportError:
     from django.utils.importlib import import_module
 from django.db import connection, transaction
 
-from haystack.utils import get_identifier
-
 from .conf import settings
 
 
@@ -26,12 +24,11 @@ def get_update_task(task_path=None):
     return task
 
 
-def enqueue_task(action, instance, **kwargs):
+def enqueue_tasks(queue, **kwargs):
     """
     Common utility for enqueing a task for the given action and
     model instance.
     """
-    identifier = get_identifier(instance)
     options = {}
     if settings.CELERY_HAYSTACK_QUEUE:
         options['queue'] = settings.CELERY_HAYSTACK_QUEUE
@@ -39,7 +36,7 @@ def enqueue_task(action, instance, **kwargs):
         options['countdown'] = settings.CELERY_HAYSTACK_COUNTDOWN
 
     task = get_update_task()
-    task_func = lambda: task.apply_async((action, identifier), kwargs, **options)
+    task_func = lambda: task.apply_async(queue, kwargs, **options)
 
     if hasattr(transaction, 'on_commit'):
         # Django 1.9 on_commit hook

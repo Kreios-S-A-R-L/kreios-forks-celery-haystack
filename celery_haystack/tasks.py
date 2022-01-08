@@ -82,7 +82,12 @@ class CeleryHaystackSignalHandler(current_app.Task):
             raise ImproperlyConfigured("Couldn't find a SearchIndex for %s." %
                                        model_class)
 
-    def run(self, action, identifier, **kwargs):
+    def run(self, queue, **kwargs):
+        """Trigger actual index handler for a list of actions."""
+        for action, identifier in queue:
+            self._run_one(action, identifier)
+
+    def _run_one(self, action, identifier, **kwargs):
         """
         Trigger the actual index handler depending on the
         given action ('update' or 'delete').

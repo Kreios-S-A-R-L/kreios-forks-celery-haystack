@@ -1,6 +1,14 @@
 Changelog
 =========
 
+v2.0 (2022-01-08)
+-----------------
+
+* The signal handler now enqueues update tasks on teardown, and the task
+  expects a list of (action, identifier) tuples to be passed. This ensures
+  that on batch updates, only one task is created on_commit instead of one
+  task per object.
+
 v0.21 (2021-12-25)
 ------------------
 
