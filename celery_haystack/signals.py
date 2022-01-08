@@ -32,6 +32,8 @@ class CelerySignalProcessor(RealtimeSignalProcessor):
         task = get_update_task()
         task.apply_async((self._queue,), {}, **options)
 
+        self._queue = []
+
 
     def enqueue(self, action, instance, sender, **kwargs):
         """
