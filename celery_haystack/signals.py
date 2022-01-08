@@ -14,10 +14,7 @@ class CelerySignalProcessor(RealtimeSignalProcessor):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._queue = []
-
-    def setup(self):
-        transaction.on_commit(self.run_task)
-        super().setup()
+        self._on_commit_registered = False
 
     def handle_save(self, sender, instance, **kwargs):
         return self.enqueue('update', instance, sender, **kwargs)
@@ -55,3 +52,6 @@ class CelerySignalProcessor(RealtimeSignalProcessor):
                 if action == 'update' and not index.should_update(instance):
                     continue
                 self._queue.append((action, get_identifier(instance)))
+
+                if not self._on_commit_registered:
+                    transaction.on_commit(self.run_task)
