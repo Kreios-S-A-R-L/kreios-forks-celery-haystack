@@ -29,10 +29,11 @@ class CelerySignalProcessor(RealtimeSignalProcessor):
         if settings.CELERY_HAYSTACK_COUNTDOWN:
             options['countdown'] = settings.CELERY_HAYSTACK_COUNTDOWN
 
-        task = get_update_task()
-        task.apply_async((self._queue,), {}, **options)
+        if self._queue:
+            task = get_update_task()
+            task.apply_async((self._queue,), {}, **options)
 
-        self._queue = []
+            self._queue = []
 
 
     def enqueue(self, action, instance, sender, **kwargs):
