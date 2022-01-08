@@ -55,11 +55,4 @@ class CeleryHaystack(AppConf):
         return data
 
 
-signal_processor = getattr(settings, 'HAYSTACK_SIGNAL_PROCESSOR', None)
-
-
-if signal_processor is None:
-    raise ImproperlyConfigured("When using celery-haystack with Haystack 2.X "
-                               "the HAYSTACK_SIGNAL_PROCESSOR setting must be "
-                               "set. Use 'celery_haystack.signals."
-                               "CelerySignalProcessor' as default.")
+signal_processor = getattr(settings, 'HAYSTACK_SIGNAL_PROCESSOR', "celery_haystack.signals.CelerySignalProcessor")

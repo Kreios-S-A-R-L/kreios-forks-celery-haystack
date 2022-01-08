@@ -1,33 +1,40 @@
+from django.db import transaction
 from django.db.models import signals
 
-from haystack.signals import BaseSignalProcessor
+from haystack.signals import RealtimeSignalProcessor
 from haystack.exceptions import NotHandled
 from haystack.utils import get_identifier
 
-from .utils import enqueue_task
+from .conf import settings
+from .utils import get_update_task
 from .indexes import CelerySearchIndex
 
 
-class CelerySignalProcessor(BaseSignalProcessor):
+class CelerySignalProcessor(RealtimeSignalProcessor):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._queue = []
 
     def setup(self):
-        signals.post_save.connect(self.enqueue_save)
-        signals.post_delete.connect(self.enqueue_delete)
+        transaction.on_commit(self.run_task)
+        super().setup()
 
-    def teardown(self):
-        signals.post_save.disconnect(self.enqueue_save)
-        signals.post_delete.disconnect(self.enqueue_delete)
-
-        enqueue_task(self._queue)
-
-    def enqueue_save(self, sender, instance, **kwargs):
+    def handle_save(self, sender, instance, **kwargs):
         return self.enqueue('update', instance, sender, **kwargs)
 
-    def enqueue_delete(self, sender, instance, **kwargs):
+    def handle_delete(self, sender, instance, **kwargs):
         return self.enqueue('delete', instance, sender, **kwargs)
+
+    def run_task(self):
+        options = {}
+        if settings.CELERY_HAYSTACK_QUEUE:
+            options['queue'] = settings.CELERY_HAYSTACK_QUEUE
+        if settings.CELERY_HAYSTACK_COUNTDOWN:
+            options['countdown'] = settings.CELERY_HAYSTACK_COUNTDOWN
+
+        task = get_update_task()
+        task.apply_async((self._queue,), {}, **options)
+
 
     def enqueue(self, action, instance, sender, **kwargs):
         """
