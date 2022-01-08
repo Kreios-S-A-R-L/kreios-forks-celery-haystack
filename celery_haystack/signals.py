@@ -10,7 +10,7 @@ from .indexes import CelerySearchIndex
 
 class CelerySignalProcessor(BaseSignalProcessor):
     def __init__(self, *args, **kwargs):
-        super().(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self._queue = []
 
     def setup(self):
