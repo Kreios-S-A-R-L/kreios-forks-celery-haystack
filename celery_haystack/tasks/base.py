@@ -2,7 +2,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.management import call_command
 from django.apps import apps
 
-from .conf import settings
+from ..conf import settings
 
 from haystack import connections, connection_router
 from haystack.exceptions import NotHandled as IndexNotFoundException
@@ -13,8 +13,7 @@ from celery.utils.log import get_task_logger
 logger = get_task_logger(__name__)
 
 
-@current_app.register_task
-class CeleryHaystackSignalHandler(current_app.Task):
+class BaseCeleryHaystackSignalHandler(current_app.Task):
     name = "haystack_signal_handler"
     using = settings.CELERY_HAYSTACK_DEFAULT_ALIAS
     max_retries = settings.CELERY_HAYSTACK_MAX_RETRIES
@@ -141,8 +140,7 @@ class CeleryHaystackSignalHandler(current_app.Task):
                 raise ValueError("Unrecognized action %s" % action)
 
 
-@current_app.register_task
-class CeleryHaystackUpdateIndex(current_app.Task):
+class BaseCeleryHaystackUpdateIndex(current_app.Task):
     """
     A celery task class to be used to call the update_index management
     command from Celery.
